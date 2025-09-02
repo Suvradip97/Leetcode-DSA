@@ -1,0 +1,67 @@
+
+
+/*
+
+1442. Count Triplets That Can Form Two Arrays of Equal XOR
+
+Given an array of integers arr.
+
+We want to select three indices i, j and k where (0 <= i < j <= k < arr.length).
+
+Let's define a and b as follows:
+
+a = arr[i] ^ arr[i + 1] ^ ... ^ arr[j - 1]
+b = arr[j] ^ arr[j + 1] ^ ... ^ arr[k]
+Note that ^ denotes the bitwise-xor operation.
+
+Return the number of triplets (i, j and k) Where a == b.
+
+ 
+
+Example 1:
+
+Input: arr = [2,3,1,6,7]
+Output: 4
+Explanation: The triplets are (0,1,2), (0,2,2), (2,3,4) and (2,4,4)
+Example 2:
+
+Input: arr = [1,1,1,1,1]
+Output: 10
+ 
+
+Constraints:
+
+1 <= arr.length <= 300
+1 <= arr[i] <= 108
+
+
+*/
+
+
+
+
+class Solution {
+public:
+    int countTriplets(vector<int>& arr) {
+        int n = arr.size();
+        vector<int> prefix(arr.size(), 0);
+        prefix[0] = arr[0];
+        for (int i = 1; i < arr.size(); i++) {
+            prefix[i] = prefix[i - 1] ^ arr[i];
+        }
+        int cnt = 0;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int x = (i == 0 ? 0 : prefix[i - 1]);
+                int ans = x ^ prefix[j];
+                if (ans == 0) {
+                    int len = j - i + 1;
+                    if (len >= 2) {
+                        cnt += len - 1;
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
+};
